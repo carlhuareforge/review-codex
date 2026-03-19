@@ -112,16 +112,26 @@ Examples: `"Authentication Flow"` → `"authentication-flow"`, `"API v2.0 Endpoi
 
 3. **Read the target .md file** into working memory.
 
-4. **Read or create the sidecar.** If `<filename>.comments.json` exists in the
-   same directory, read it. If it exists but is malformed, back it up to
-   `.comments.json.bak` and create fresh. If it doesn't exist, create:
+4. **Read or create the sidecar.** The markdown-threads extension derives the
+   sidecar path by stripping the `.md` extension and appending `.comments.json`:
+   ```
+   feature-design.md → feature-design.comments.json
+   ```
+   **NOT** `feature-design.md.comments.json` — that is wrong and the extension
+   will not find it.
+
+   If `<basename>.comments.json` exists in the same directory, read it. If it
+   exists but is malformed, back it up to `.comments.json.bak` and create fresh.
+   If it doesn't exist, create:
    ```json
    {
-     "doc": "<filename>.md",
+     "doc": "<basename>.md",
      "version": "2.0",
      "comments": []
    }
    ```
+   Where `<basename>` is the filename without the `.md` extension
+   (e.g., for `feature-design.md`, `<basename>` is `feature-design`).
 
 5. **Read config.** Load `.review-config.json` from the document's directory
    if present. Otherwise use defaults:
@@ -315,7 +325,7 @@ Examples: `"Authentication Flow"` → `"authentication-flow"`, `"API v2.0 Endpoi
       § <Section Heading> — SEVERITY
         <brief description>
 
-    Full history: <path>.comments.json
+    Full history: <path_without_md>.comments.json
     View in VS Code: install markdown-threads extension
     ```
 
@@ -405,6 +415,8 @@ If you have no new issues or replies, write an empty array: `[]`
 
 ## Critical Rules
 
+- **Sidecar file naming:** Strip `.md` then append `.comments.json`. Example: `design.md` → `design.comments.json`. NEVER use `design.md.comments.json` — the extension will not find it.
+- **All UUIDs must be globally unique.** Never reuse a UUID across thread IDs and comment entry IDs, even in different threads.
 - NEVER pipe Codex stdout into Claude's context. Always discard or redirect.
 - ONLY read `.review-output.json` for reviewer results.
 - NEVER modify existing human comments in `.comments.json`.
