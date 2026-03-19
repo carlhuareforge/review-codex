@@ -1,0 +1,8 @@
+{
+  "name": "review-codex",
+  "description": "Adversarial design review skill using Codex CLI as reviewer and Claude as designer",
+  "version": "1.0.0",
+  "author": {
+    "name": "carlhua"
+  }
+}
