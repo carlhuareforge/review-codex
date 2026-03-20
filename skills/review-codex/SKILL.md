@@ -95,6 +95,8 @@ schema exactly. This is non-negotiable — the extension validates it.
 6. Trim leading/trailing hyphens
 ```
 
+**CRITICAL: After generating any sectionSlug, verify no consecutive hyphens (`--`) remain. `--` is always a bug — it means step 5 was skipped.**
+
 Examples: `"Authentication Flow"` → `"authentication-flow"`, `"API v2.0 Endpoints"` → `"api-v20-endpoints"`
 
 ## Behavior
